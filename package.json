@@ -1,0 +1,19 @@
+{
+  "name": "nodeschool",
+  "version": "1.0.0",
+  "description": "This is a repository for all of the NodeSchool.io tutorials that I have gone through.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yarshicle/NodeSchool.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yarshicle/NodeSchool/issues"
+  },
+  "homepage": "https://github.com/yarshicle/NodeSchool#readme"
+}
