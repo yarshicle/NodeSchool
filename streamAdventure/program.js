@@ -57,22 +57,22 @@
 // var http = require('http')
 // var fs = require('fs')
 // var t2map = require('through2-map')
+// //var through = require('through2')
 
 // var port = process.argv[2]
 
 // var server = http.createServer(function (req, res) {
 //     if (req.method === 'POST') {
-//         //USE through2-map
 //         req.pipe(t2map(function (chunk) {
 //             return chunk.toString().toUpperCase()
 //         })).pipe(res)
-//         //USE through2
+//         //use through2
 //         // req.pipe(through(function (buf, _, next) {
-//         //     this.push(buf.toString().toUpperCase());
+//         //     this.push(buf.tostring().touppercase());
 //         //     next();
 //         // })).pipe(res);
 //     } else {
-//         res.end('send a POST!\n')
+//         res.end('send a post!\n')
 //     }
 // })
 // server.listen(port)
@@ -128,3 +128,67 @@
 //         done();
 //     }
 // };
+
+//COMBINER
+// var combine = require('stream-combiner')
+// var split = require('split')
+// var zlib = require('zlib')
+// var through = require('through2')
+
+// module.exports = function() {
+//     var grouper = through(write, end)
+//     var current;
+
+//     function write (line, _, next) {
+//         if (line.length === 0) return next()
+//         var row = JSON.parse(line)
+
+//         if (row.type === 'genre') {
+//             if (current) {
+//                 this.push(JSON.stringify(current) + '\n')
+//             }
+//             current = { name: row.name, books: [] }
+//         }
+//         else if (row.type === 'book') {
+//             current.books.push(row.name)
+//         }
+//         next()
+//     }
+
+//     function end (next) {
+//         if (current) {
+//             this.push(JSON.stringify(current) + '\n')
+//         }
+//         next()
+//     }
+
+//     return combine(split(), grouper, zlib.createGzip())
+// }
+
+//CRYPT
+// var crypto = require('crypto')
+
+// process.stdin
+//     .pipe(crypto.createDecipher('aes256', process.argv[2]))
+//     .pipe(process.stdout)
+
+//SECRETZ
+var crypto = require('crypto')
+var tar = require('tar')
+var zlib = require('zlib')
+var concat = require('concat-stream')
+
+var parser = tar.Parse()
+parser.on('entry', function (e) {
+    if (e.type !== 'File') return;
+
+    var h = crypto.createHash('md5', { encoding: 'hex'})
+    e.pipe(h).pipe(concat(function (hash) {
+        console.log(hash + ' ' + e.path)
+    }))
+})
+
+process.stdin
+    .pipe(crypto.createDecipher(process.argv[2], process.argv[3]))
+    .pipe(zlib.createGunzip())
+    .pipe(parser)
