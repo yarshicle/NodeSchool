@@ -111,25 +111,6 @@
 // }
 
 //DUPLEXER REDUX
-// var duplexer = require('duplexer2').obj
-// var through = require('through2').obj
-
-// module.exports = function (counter) {
-//     var counts = {}
-//     return duplexer({writableObjectMode:true}, through(record_count, set_count), counter)
-
-//     function record_count(obj) {
-//         var country = obj.country
-//         var count = counts[country] || 0
-//         counts[country] += 1
-//     }
-
-//     function set_count() {
-//         counter.setCounts(counts)
-//         counts = {}
-//     }
-// }
-
 var duplexer = require('duplexer2');
 var through = require('through2').obj;
 
